@@ -1,0 +1,9 @@
+*~
+*.out
+*.vcd
+*.bin
+*.blif
+*.txt
+*.asc
+*.json
+
