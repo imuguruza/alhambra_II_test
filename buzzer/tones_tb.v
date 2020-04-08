@@ -3,40 +3,45 @@
 //-- Banco de pruebas para el generador de 4 tonos
 //-------------------------------------------------------------------
 //-- BQ August 2015. Written by Juan Gonzalez (Obijuan)
+//-- Modified by Iñigo Muguruza
 //-------------------------------------------------------------------
 //-- GPL License
 //-------------------------------------------------------------------
 
 module tones_tb();
 
-//-- Registro para generar la señal de reloj
+//-- Clock Register
 reg clk = 0;
 
 //-- Salidas de los canales
 wire out;
 
 
-//-- Instanciar el componente y establecer el valor del divisor
-//-- Se pone un valor bajo para simular (de lo contrario tardaria mucho)
-tones #(3)
+//-- Instantiate with low values, to simulate
+tones #(
+  .Fbase(2),
+  .F0(3),
+  .F1(4),
+  .F2(5),
+  .F3(6),
+  .Fsel(20)
+)
   dut(
     .clk(clk),
     .out(out)
   );
 
-//-- Generador de reloj. Periodo 2 unidades
+//-- Generate clock
 always
   # 1 clk <= ~clk;
 
-
-//-- Proceso al inicio
 initial begin
 
-  //-- Fichero donde almacenar los resultados
+  //-- Dump data to file
   $dumpfile("tones_tb.vcd");
   $dumpvars(0, tones_tb);
 
-  # 100 $display("FIN de la simulacion");
+  # 200 $display("FIN de la simulacion");
   $finish;
 end
 

@@ -1,25 +1,29 @@
 [*]
-[*] GTKWave Analyzer v3.3.64 (w)1999-2014 BSI
-[*] Tue Aug 25 20:19:26 2015
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Wed Apr  8 08:20:41 2020
 [*]
-[dumpfile] "/home/obijuan/development/open-fpga-verilog-tutorial/tutorial/T17-tones/tones_tb.vcd"
-[dumpfile_mtime] "Tue Aug 25 20:19:01 2015"
-[dumpfile_size] 1940
-[savefile] "/home/obijuan/development/open-fpga-verilog-tutorial/tutorial/T17-tones/tones_tb.gtkw"
-[timestart] 0
-[size] 1000 600
+[dumpfile] "/home/inigo/Documents/fpga/alhambra_II_test/buzzer/tones_tb.vcd"
+[dumpfile_mtime] "Wed Apr  8 08:18:36 2020"
+[dumpfile_size] 1997
+[savefile] "/home/inigo/Documents/fpga/alhambra_II_test/buzzer/tones_tb.gtkw"
+[timestart] 44
+[size] 1920 1025
 [pos] -1 -1
 *-2.933561 30 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tones_tb.
 [sst_width] 223
 [signals_width] 177
 [sst_expanded] 1
 [sst_vpaned_height] 160
 @28
 tones_tb.clk
-tones_tb.ch0
-tones_tb.ch1
-tones_tb.ch2
-@29
-tones_tb.ch3
+tones_tb.dut.base
+tones_tb.dut.ch0
+tones_tb.dut.ch1
+tones_tb.dut.ch2
+tones_tb.dut.ch3
+tones_tb.dut.count_clk
+tones_tb.dut.counter[1:0]
+tones_tb.dut.out
 [pattern_trace] 1
 [pattern_trace] 0
