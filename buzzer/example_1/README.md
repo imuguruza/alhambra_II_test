@@ -1,3 +1,5 @@
+This example creates four soounds using multiple dividers and a multiplexer. The multiplexer selects sequentially the different outputs. For that purpose, a counter has been created.
+
 # Material
 
 + [Alhambra II board](https://alhambrabits.com/alhambra/)
