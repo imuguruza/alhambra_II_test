@@ -1,0 +1,26 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Sat Apr 11 08:59:13 2020
+[*]
+[dumpfile] "/home/inigo/Documents/fpga/alhambra_II_test/buzzer/buzzer_tb.vcd"
+[dumpfile_mtime] "Sat Apr 11 08:58:24 2020"
+[dumpfile_size] 2902
+[savefile] "/home/inigo/Documents/fpga/alhambra_II_test/buzzer/buzzer_tb.gtkw"
+[timestart] 0
+[size] 1920 1025
+[pos] -1 -1
+*-5.955058 23 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] buzzer_tb.
+[treeopen] buzzer_tb.dut.
+[sst_width] 223
+[signals_width] 158
+[sst_expanded] 1
+[sst_vpaned_height] 301
+@28
+buzzer_tb.clk
+buzzer_tb.dut.en
+buzzer_tb.dut.note_gen.divcounter
+buzzer_tb.dut.out
+buzzer_tb.wave_pin
+[pattern_trace] 1
+[pattern_trace] 0
