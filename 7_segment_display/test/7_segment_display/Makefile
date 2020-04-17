@@ -2,11 +2,12 @@
 #NAME = buzzer
 NAME = seven_segment_decoder
 DEPEND = clk_divider
+DEPEND2 = genrom
 SRC_PTH = ../../
 
 sim: $(NAME)_tb.vcd
 
-$(NAME)_tb.vcd: $(SRC_PTH)$(NAME).v $(SRC_PTH)$(DEPEND).v $(NAME)_tb.v
+$(NAME)_tb.vcd: $(SRC_PTH)$(NAME).v $(SRC_PTH)$(DEPEND).v $(SRC_PTH)$(DEPEND2).v $(NAME)_tb.v
 
 	#-- Compile
 	iverilog $^ -o $(NAME)_tb.out

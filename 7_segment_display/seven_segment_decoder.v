@@ -9,7 +9,7 @@ module seven_segment_decoder #(
 
        (
          input wire clk,                    //-- Input clock
-         input wire [AW-1 : 0] addr,   //-- Data address
+         input wire [AW-1: 0] addr,   //-- Data address
          input wire reset,
          output reg [DW-1: 0] led_port,//-- LED matrix value (ON/OFF)
          output reg c);                //-- ON/OFF Control pin, '1' first
@@ -19,7 +19,7 @@ localparam ROMFILE = "display_code.list";
 // Compute the amount of items the list has
 localparam list_number =  2 ** AW;
 // Create a register that stores the values
-reg [DW-1: 0] display_mem [list_number-1 : 0];
+wire [DW-1:0] display_code;
 //reg [DW-1: 0] rom [0: NPOS-1];
 // clk_divider enable reset dependent
 reg enable;
@@ -27,29 +27,8 @@ reg enable;
 // This will allow us to select which display to turn on
 wire segment_selector;
 
-//-- Read memory
-always @(posedge segment_selector or negedge segment_selector) begin
-  if (reset) begin
-    // Do not turn on any LED
-    led_port = 0;
-    //c pin into high-impedance
-    c = 1'bz;
-    end
-  else if (segment_selector) // '1' charge the left display, '0' charge the right display
-      led_port <= display_mem[addr[AW-1:4]]; //Decode the MSB of address
-  else
-      led_port <= display_mem[addr[3:0]]; // DEcode the LSB of address
-  //end
-  //led_port <= (reset) ? 0 : display_mem[addr];
-end
-
-//-- Read list
-initial begin
-  $readmemh(ROMFILE, display_mem);
-end
-
-always @(posedge clk)
-  enable = ~reset;
+localparam  ROM_size = 4; //in bits
+reg [ 3 : 0 ] rom_addr;
 
 // Instantiate clk_divider to obtain clk for refreshing segment
 //-- Instantiate test component
@@ -60,10 +39,35 @@ clk_divider #(.F(refresh_f))
     .clk_out(segment_selector)
   );
 
+genrom #(
+        .ROMFILE(ROMFILE),
+        .AW(ROM_size),
+        .DW(DW))
+  ROM(  .clk(clk),
+        .addr(rom_addr),
+        .data(display_code)
+      );
+
+//Set enable depending reset value
+always @(posedge clk)
+  enable = ~reset;
+
+
 // Use segment_en to handle segment common cathode pin
 //assign c = segment_selector;
-always @(posedge clk)
+always @(posedge clk) begin
   c <= segment_selector;
+  led_port <= display_code;
+  end
+
+// In rising edge, load left display
+always @(posedge segment_selector)
+  rom_addr <= addr [AW -1 : 4];
+
+// In rising edge, load right display
+always @(negedge segment_selector)
+  rom_addr <= addr [3 : 0];
+
 
 
 endmodule
