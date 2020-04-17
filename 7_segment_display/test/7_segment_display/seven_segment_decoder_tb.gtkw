@@ -1,0 +1,51 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Fri Apr 17 13:19:31 2020
+[*]
+[dumpfile] "/home/inigo/Documents/fpga/alhambra_II_test/7_segment_display/test/7_segment_display/seven_segment_decoder_tb.vcd"
+[dumpfile_mtime] "Fri Apr 17 13:18:20 2020"
+[dumpfile_size] 3219
+[savefile] "/home/inigo/Documents/fpga/alhambra_II_test/7_segment_display/test/7_segment_display/seven_segment_decoder_tb.gtkw"
+[timestart] 0
+[size] 1920 1025
+[pos] -1 -1
+*-5.025105 24 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] seven_segment_decoder_tb.
+[treeopen] seven_segment_decoder_tb.dut.
+[sst_width] 223
+[signals_width] 243
+[sst_expanded] 1
+[sst_vpaned_height] 302
+@200
+-DUT In/Out
+@28
+seven_segment_decoder_tb.clk_in
+seven_segment_decoder_tb.reset
+@22
+seven_segment_decoder_tb.addr[7:0]
+@28
+seven_segment_decoder_tb.c
+@22
+seven_segment_decoder_tb.led_port[6:0]
+@200
+-7segment_decoder
+@28
+seven_segment_decoder_tb.dut.clk
+seven_segment_decoder_tb.dut.enable
+seven_segment_decoder_tb.dut.reset
+seven_segment_decoder_tb.dut.segment_selector
+@22
+seven_segment_decoder_tb.dut.addr[7:0]
+@23
+seven_segment_decoder_tb.dut.led_port[6:0]
+@200
+-clock_divider
+@28
+seven_segment_decoder_tb.dut.display_en.clk
+seven_segment_decoder_tb.dut.display_en.en
+@22
+seven_segment_decoder_tb.dut.display_en.counter[3:0]
+@28
+seven_segment_decoder_tb.dut.display_en.clk_out
+[pattern_trace] 1
+[pattern_trace] 0
