@@ -36,45 +36,29 @@ seven_segment_decoder #(
 
 always
   # 1 clk_in <= ~clk_in;
-/*always
-  # 1 addr <= 0x00;
-always
-  # 2 addr <= 0x11;
-always
-  # 3 addr <= 0x22;
-always
-  # 4 addr <= 0x33;
-always
-  # 5 addr <= 0x44;
-always
-  # 6 addr <= 0x55;
-always
-  # 7 addr <= 0x66;
-always
-  # 8 addr <= 0x77;
-always
-  # 9 addr <= 0x88;
-always
-  # 10 addr <= 0x99;
-always
-  # 11 addr <= 0xAA;
-always
-  # 12 addr <= 0xBB;
-always
-  # 13 addr <= 0xCC;
-always
-  # 14 addr <= 0xDD;
-always
-  # 15 addr <= 0xEE;
-always
-  # 16 addr <= 0xFF;*/
 
 initial begin
   //-- Store Results
   $dumpfile("seven_segment_decoder_tb.vcd");
   $dumpvars(0, seven_segment_decoder_tb);
 
-  #10 addr <= 8'h0F;
+  //Test all the possible characters out
+  #5 addr <= 8'hF0;
+  #15 addr <= 8'h01;
+  #25 addr <= 8'h12;
+  #35 addr <= 8'h23;
+  #45 addr <= 8'h34;
+  #55 addr <= 8'h45;
+  #65 addr <= 8'h56;
+  #75 addr <= 8'h67;
+  #85 addr <= 8'h78;
+  #95 addr <= 8'h89;
+  #105 addr <= 8'h9A;
+  #115 addr <= 8'hAB;
+  #125 addr <= 8'hBC;
+  #135 addr <= 8'hCD;
+  #145 addr <= 8'hDE;
+  #1555 addr <= 8'h0F;
 
 
   # 200 $display("END of simulation");
