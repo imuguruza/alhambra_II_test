@@ -64,7 +64,7 @@ always @(posedge clk) begin
 always @(posedge segment_selector)
   rom_addr <= addr [AW -1 : 4];
 
-// In rising edge, load right display
+// In falling edge, load right display
 always @(negedge segment_selector)
   rom_addr <= addr [3 : 0];
 
