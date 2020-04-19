@@ -1,35 +1,32 @@
-`include "divider.vh"
-/*
-module buzzer_tb();
+// ======================
+//  display_test test bench
+// ======================
 
-//-- registers
-reg clk = 0;
-//-- Output signal
-wire wave_pin;
+//`default_nettype none
 
 
-//-- Instantiate and set note gen to 1st Octave RE note
-buzzer #(.note_divider_value(2))
-  dut(
-    .clk_in(clk),
-    .out (wave_pin)
-  );
+module display_tb();
 
-//-- Generate clock and enable signals
+reg clk;
+reg [6:0] led_port;
+reg c;
+
+display_test #()
+            dut(
+           .clk(clk),                    //-- Input clock
+           .led_port(led_port),//-- LED matrix value (ON/OFF)
+           .c(c));                //-- ON/OFF Control pin, '1' first
+                                         //-- '0' second display
 always
-  # 1 clk <= ~clk;
-//always
-//  # 4 en <= ~en;
+# 1 clk_in <= ~clk_in;
 
-//-- Proceso al inicio
 initial begin
+//-- Store Results
+$dumpfile("display_test_tb.vcd");
+$dumpvars(0, seven_segment_decoder_tb);
 
-  //-- Fichero donde almacenar los resultados
-  $dumpfile("buzzer_tb.vcd");
-  $dumpvars(0, buzzer_tb);
-
-  # 200 $display("END of simulation");
-  $finish;
+# 200 $display("END of simulation");
+$finish;
 end
 
-endmodule*/
+endmodule
