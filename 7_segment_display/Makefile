@@ -1,5 +1,5 @@
-DEPS = note_gen
-NAME = buzzer
+DEPS = seven_segment_decoder.v clk_divider.v genrom
+NAME = display_test
 
 
 all: sim sint
