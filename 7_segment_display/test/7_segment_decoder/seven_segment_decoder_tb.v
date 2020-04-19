@@ -28,11 +28,11 @@ seven_segment_decoder #(
          .refresh_f(`F_1M2Hz)
          )
       dut(
-         .clk(clk_in),                    //-- Input clock
-         .addr(addr),   //-- Data address
-         .reset(reset),
-         .led_port(led_port),//-- LED matrix value (ON/OFF)
-         .c(c));
+         .clk(clk_in),       //-- Input clock
+         .addr(addr),        //-- Data address
+         .reset(reset),      //-- Reset
+         .led_port(led_port),//-- LED port (ON/OFF)
+         .c(c));             //-- Display selector pin (1 left, 0 right)
 
 always
   # 1 clk_in <= ~clk_in;
@@ -58,10 +58,10 @@ initial begin
   #125 addr <= 8'hBC;
   #135 addr <= 8'hCD;
   #145 addr <= 8'hDE;
-  #1555 addr <= 8'h0F;
+  #155 addr <= 8'h0F;
 
 
-  # 200 $display("END of simulation");
+  # 165 $display("END of simulation");
   $finish;
 end
 
