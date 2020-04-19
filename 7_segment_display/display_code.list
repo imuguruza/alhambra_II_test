@@ -2,17 +2,17 @@
 // each position has coded the LED status, coded like GFEDCBA
 3F   //-- Character 0 =>  0111111 => 3F
 06   //-- Character 1 =>  0000110 => 06
-2B   //-- Character 2 =>  1011011 => 5B
-06   //-- Character 3 =>  1001111 => 4F
+5B   //-- Character 2 =>  1011011 => 5B
+4F   //-- Character 3 =>  1001111 => 4F
 66   //-- Character 4 =>  1100110 => 66
 6D   //-- Character 5 =>  1101101 => 6D
 7D   //-- Character 6 =>  1111101 => 7D
 07   //-- Character 7 =>  0000111 => 07
-FF   //-- Character 8 =>  1111111 => FF
+7F   //-- Character 8 =>  1111111 => 7F
 6F   //-- Character 9 =>  1101111 => 6F
 77   //-- Character A =>  1110111 => 77
 7C   //-- Character B =>  1111100 => 7C
-79   //-- Character C =>  1111001 => 79
+39   //-- Character C =>  0111001 => 39
 5E   //-- Character D =>  1011110 => 5E
 79   //-- Character E =>  1111001 => 79
 67   //-- Character F =>  1100111 => 67
