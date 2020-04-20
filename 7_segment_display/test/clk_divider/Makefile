@@ -1,9 +1,9 @@
 #DEPS = note_gen
 #NAME = buzzer
 CLK_TEST = clk_divider
-SRC_PTH = ../../
+SRC_PTH = ../../src/
 
-clock_sim: $(CLK_TEST)_tb.vcd
+sim: $(CLK_TEST)_tb.vcd
 
 $(CLK_TEST)_tb.vcd: $(SRC_PTH)$(CLK_TEST).v $(CLK_TEST)_tb.v
 
