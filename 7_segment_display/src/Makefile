@@ -1,23 +1,11 @@
 DEPS = seven_segment_decoder.v clk_divider.v genrom
 NAME = display_test
+PATH_TB = ../test/display_test
 
 
 all: sim sint
 
-sim: $(NAME)_tb.vcd
-
 sint: $(NAME).bin
-
-$(NAME)_tb.vcd: $(DEPS).v $(NAME).v $(NAME)_tb.v
-
-	#-- Compile
-	iverilog $^ -o $(NAME)_tb.out
-
-	#-- Simulate
-	./$(NAME)_tb.out
-
-	#-- Check sim using gtkwave
-	gtkwave $@ $(NAME)_tb.gtkw &
 
 $(NAME).bin: $(NAME).pcf $(NAME).v
 
