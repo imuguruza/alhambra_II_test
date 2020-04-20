@@ -3,7 +3,7 @@
 NAME = seven_segment_decoder
 DEPEND = clk_divider
 DEPEND2 = genrom
-SRC_PTH = ../../
+SRC_PTH = ../../src/
 
 sim: $(NAME)_tb.vcd
 
