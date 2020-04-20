@@ -1,0 +1,59 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Mon Apr 20 08:29:10 2020
+[*]
+[dumpfile] "/home/inigo/Documents/fpga/alhambra_II_test/7_segment_display/display_test_tb.vcd"
+[dumpfile_mtime] "Mon Apr 20 08:26:38 2020"
+[dumpfile_size] 45895
+[savefile] "/home/inigo/Documents/fpga/alhambra_II_test/7_segment_display/display_test_tb.gtkw"
+[timestart] 0
+[size] 1920 1025
+[pos] -1 -1
+*-5.955058 232 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] display_test_tb.
+[treeopen] display_test_tb.dut.
+[sst_width] 223
+[signals_width] 245
+[sst_expanded] 1
+[sst_vpaned_height] 301
+@200
+-Display Test TB
+@28
+display_test_tb.clk
+@22
+display_test_tb.led_port[6:0]
+@28
+display_test_tb.c
+@200
+-Display Test module
+@28
+display_test_tb.dut.clk
+display_test_tb.dut.Hz_clock
+@22
+display_test_tb.dut.counter[7:0]
+@28
+display_test_tb.dut.enable
+display_test_tb.dut.reset
+display_test_tb.dut.wire_c
+display_test_tb.dut.c
+@22
+display_test_tb.dut.wire_led_port[6:0]
+display_test_tb.dut.led_port[6:0]
+@200
+-Decoder
+@28
+display_test_tb.dut.decoder.clk
+display_test_tb.dut.decoder.enable
+display_test_tb.dut.decoder.reset
+@22
+display_test_tb.dut.decoder.addr[7:0]
+display_test_tb.dut.decoder.rom_addr[3:0]
+@28
+display_test_tb.dut.decoder.segment_selector
+@22
+display_test_tb.dut.decoder.display_code[6:0]
+display_test_tb.dut.decoder.led_port[6:0]
+@28
+display_test_tb.dut.decoder.c
+[pattern_trace] 1
+[pattern_trace] 0
