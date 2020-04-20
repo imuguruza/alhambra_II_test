@@ -1,9 +1,9 @@
-set_io clk_in 49
+set_io clk         49
 set_io led_port[0] 2  # D0 => AA
 set_io led_port[1] 1  # D1 => AB
 set_io led_port[2] 4  # D2 => AC
 set_io led_port[3] 3  # D3 => AD
 set_io led_port[4] 8  # D4 => AE
 set_io led_port[5] 7  # D5 => AF
-set_io led_port[7] 10 # D6 => AG
+set_io led_port[6] 10 # D6 => AG
 set_io c           9  # D7 => C
