@@ -60,6 +60,7 @@ always @(posedge clk) begin
   led_port <= display_code;
   end
 
+/*
 // In rising edge, load left display
 always @(posedge segment_selector)
   rom_addr <= addr [AW -1 : 4];
@@ -67,7 +68,12 @@ always @(posedge segment_selector)
 // In falling edge, load right display
 always @(negedge segment_selector)
   rom_addr <= addr [3 : 0];
+*/
 
-
+//Rewrite the top one
+// When segment_selector is at '1', load left segment code
+// when is '0', left segment code
+always @(posedge clk)
+  rom_addr <= (segment_selector) ?  addr[AW -1 : 4] : addr[3 : 0];
 
 endmodule
