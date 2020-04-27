@@ -9,26 +9,27 @@ module pll(
 	);
 
 /*
-$ icepll -i 10 -o 25 -f
+$ icepll -i 12 -o 25 
 
-F_PLLIN:    10.000 MHz (given)
-F_PLLOUT:   25.000 MHz (requested)
-F_PLLOUT:   25.000 MHz (achieved)
+F_PLLIN:    12.000 MHz (given)
+F_PLLOUT:   25.175 MHz (requested)
+F_PLLOUT:   25.125 MHz (achieved)
 
 FEEDBACK: SIMPLE
-F_PFD:   10.000 MHz
-F_VCO:  800.000 MHz
+F_PFD:   12.000 MHz
+F_VCO:  804.000 MHz
 
 DIVR:  0 (4'b0000)
-DIVF: 79 (7'b1001111)
+DIVF: 66 (7'b1000010)
 DIVQ:  5 (3'b101)
 
 FILTER_RANGE: 1 (3'b001)
+
 */
 
 // Store PLL config values in local parameters
 localparam  DIVR_val = 4'b0000;
-localparam  DIVF_val = 7'b1001111;
+localparam  DIVF_val = 7'b1000010;
 localparam  DIVQ_val = 3'b101;
 localparam  FILTER_val = 3'b001;
 
