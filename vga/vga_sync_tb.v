@@ -34,14 +34,14 @@ vga_sync vga_dut(
       );
 
 always
-  # 1 clk_in <= ~clk_in;
+  # 20 clk_in <= ~clk_in;
 
 initial begin
   //-- Store Results
   $dumpfile("vga_sync_tb.vcd");
   $dumpvars(0, vga_sync_tb);
 
-  # 843200 $display("END of simulation");
+  # 33728000 $display("END of simulation");
   $finish;
 end
 
