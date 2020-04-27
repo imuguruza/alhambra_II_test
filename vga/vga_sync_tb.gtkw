@@ -1,0 +1,51 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Mon Apr 27 10:37:11 2020
+[*]
+[dumpfile] "/home/inigo/Documents/fpga/alhambra_II_test/vga/vga_sync_tb.vcd"
+[dumpfile_mtime] "Mon Apr 27 10:36:50 2020"
+[dumpfile_size] 30283547
+[savefile] "/home/inigo/Documents/fpga/alhambra_II_test/vga/vga_sync_tb.gtkw"
+[timestart] 50
+[size] 1920 1025
+[pos] -1 -1
+*-1.000000 23 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] vga_sync_tb.
+[sst_width] 223
+[signals_width] 223
+[sst_expanded] 1
+[sst_vpaned_height] 301
+@200
+-VGA TB
+@28
+vga_sync_tb.clk_in
+vga_sync_tb.clk_sys
+vga_sync_tb.display_en
+@24
+vga_sync_tb.h_count[9:0]
+@28
+vga_sync_tb.h_sync
+@24
+vga_sync_tb.v_count[9:0]
+@28
+vga_sync_tb.v_sync
+vga_sync_tb.reset
+@200
+-VGA
+@28
+vga_sync_tb.vga_dut.clk_in
+vga_sync_tb.vga_dut.clk_sys
+vga_sync_tb.vga_dut.display_en
+vga_sync_tb.vga_dut.reset
+@24
+vga_sync_tb.vga_dut.h_count[9:0]
+vga_sync_tb.vga_dut.h_counter[9:0]
+@28
+vga_sync_tb.vga_dut.h_sync
+@25
+vga_sync_tb.vga_dut.v_count[9:0]
+@24
+vga_sync_tb.vga_dut.v_counter[9:0]
+vga_sync_tb.vga_dut.v_sync
+[pattern_trace] 1
+[pattern_trace] 0
