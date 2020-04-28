@@ -4,8 +4,12 @@ set_io clk_in 49
 set_io reset 34
 set_io r0 1
 set_io r1 2
+set_io r2 20
 set_io g0 3
 set_io g1 4
+set_io g2 22
 set_io b0 7
 set_io b1 8
+set_io b2 19
 set_io led 45
+set_io locked_led 37
