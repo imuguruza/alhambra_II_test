@@ -22,10 +22,16 @@ wire [9:0] h_count;
 wire [9:0] v_count;
 assign  led = clk_sys;
 
+localparam  h_pixel_max = 640;
+localparam  v_pixel_max = 480;
+localparam  h_pixel_half = 320;
+localparam  v_pixel_half = 240;
+
 //Check if we can create RGB colors
 always @(posedge clk_sys) begin
-  if (display_en)
-    begin
+  if (display_en) begin
+    if (h_count < h_pixel_half
+        && v_count < v_pixel_half) begin
       //Assign here your test color
       r0 <= 1'b0;
       r1 <= 1'b0;
@@ -33,21 +39,55 @@ always @(posedge clk_sys) begin
       g0 <= 1'b0;
       g1 <= 1'b0;
       g2 <= 1'b0;
-      b0 <= 1'b0;
-      b1 <= 1'b0;
+      b0 <= 1'b1;
+      b1 <= 1'b1;
       b2 <= 1'b1;
-    end
-  else
-    begin
+    end else if (h_count > h_pixel_half
+            && v_count < v_pixel_half) begin
+      //Assign here your test color
       r0 <= 1'b0;
       r1 <= 1'b0;
       r2 <= 1'b0;
+      g0 <= 1'b1;
+      g1 <= 1'b1;
+      g2 <= 1'b1;
+      b0 <= 1'b0;
+      b1 <= 1'b0;
+      b2 <= 1'b0;
+     end else if (h_count < h_pixel_half
+            && v_count > v_pixel_half) begin
+      //Assign here your test color
+      r0 <= 1'b1;
+      r1 <= 1'b1;
+      r2 <= 1'b1;
       g0 <= 1'b0;
       g1 <= 1'b0;
       g2 <= 1'b0;
       b0 <= 1'b0;
       b1 <= 1'b0;
       b2 <= 1'b0;
+    end else begin
+      //Assign here your test color
+      r0 <= 1'b1;
+      r1 <= 1'b1;
+      r2 <= 1'b1;
+      g0 <= 1'b1;
+      g1 <= 1'b1;
+      g2 <= 1'b1;
+      b0 <= 1'b1;
+      b1 <= 1'b1;
+      b2 <= 1'b1;
+      end
+  end else begin
+    r0 <= 1'b0;
+    r1 <= 1'b0;
+    r2 <= 1'b0;
+    g0 <= 1'b0;
+    g1 <= 1'b0;
+    g2 <= 1'b0;
+    b0 <= 1'b0;
+    b1 <= 1'b0;
+    b2 <= 1'b0;
   end
 end
 
