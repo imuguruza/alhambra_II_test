@@ -52,7 +52,6 @@ always @(posedge sys_clk) begin
     v_counter <= 0;
     display_en <= 0;
   end
-
   else
     begin
     // Generate display enable signal
@@ -83,9 +82,6 @@ always @(posedge sys_clk) begin
     h_sync <= 0;
   else
     h_sync <= 1;
-//end
-
-//always @(posedge sys_clk) begin
   // Check if sync_pulse needs to be created
   if (v_counter >= (v_pixel_display + v_pixel_front_porch_amount)
       && v_counter < (v_pixel_display + v_pixel_front_porch_amount + v_pixel_sync_amount) )
