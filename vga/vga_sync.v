@@ -19,7 +19,8 @@ module vga_sync(
       output wire clk_sys,
       output reg [9:0] h_count,
       output reg [9:0] v_count,
-      output reg display_en
+      output reg display_en,
+      output wire locked
       );
 
 wire locked;
@@ -64,7 +65,7 @@ always @(posedge sys_clk) begin
     if (h_counter >= h_pixel_total)
       begin
         h_counter <= 0;
-        v_counter = v_counter + 1;
+        v_counter <= v_counter + 1;
         end
     else
         //horizontal increment pixel value
@@ -78,7 +79,7 @@ end
 always @(posedge sys_clk) begin
   // Check if sync_pulse needs to be created
   if (h_counter >= (h_pixel_display + h_pixel_front_porch_amount)
-      && h_counter <= (h_pixel_display + h_pixel_front_porch_amount + h_pixel_sync_amount) )
+      && h_counter < (h_pixel_display + h_pixel_front_porch_amount + h_pixel_sync_amount) )
     h_sync <= 0;
   else
     h_sync <= 1;
