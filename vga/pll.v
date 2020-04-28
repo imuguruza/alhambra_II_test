@@ -9,7 +9,7 @@ module pll(
 	);
 
 /*
-$ icepll -i 12 -o 25 
+$ icepll -i 12 -o 25.175 
 
 F_PLLIN:    12.000 MHz (given)
 F_PLLOUT:   25.175 MHz (requested)
