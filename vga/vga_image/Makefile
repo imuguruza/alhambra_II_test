@@ -23,7 +23,7 @@ sint: $(NAME).bin
 $(NAME).bin: $(NAME).pcf $(NAME).v
 
 	#-- Sinth
-	yosys -p 'synth_ice40 -top $(NAME) -json $(NAME).json' $(NAME).v $(DEPS).v $(DEPS2).v #$(DEPS3).v
+	yosys -p 'synth_ice40 -top $(NAME) -json $(NAME).json' $(NAME).v $(DEPS).v $(DEPS2).v $(DEPS3).v
 
 
 	#-- Place & route
