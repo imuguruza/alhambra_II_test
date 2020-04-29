@@ -23,7 +23,7 @@ wire [9:0] h_count;
 wire [9:0] v_count;
 assign  led = clk_sys;
 
-/*
+
 // RAM interfacing
 // 510 x 85
 localparam  AddressWidth = 9; // 2^7 = 128
@@ -33,52 +33,74 @@ reg [AddressWidth-1:0] addr_counter = 0;
 reg [DataWidth-1:0]  data_in;
 reg [DataWidth-1:0]  data_out;
 
-reg [DataWidth-1:0]  pixel_row;
+reg [DataWidth-1:0]  pixel_row_current;
 reg [DataWidth-1:0]  pixel_row_next;
 
+reg [6-1:0]  rgb_out = 5'h3F;
 
-wire rw;
-*/
+reg rw = 1; // Set enabled read of RAM
 
-localparam  h_pixel_max = 640;
-localparam  h_square_start = 278;
-localparam  h_square_finish = 363;
 
-localparam  v_pixel_max = 480;
-localparam  v_square_start = 198;
-localparam  v_square_finish = 283;
+localparam  h_total  = 480;
+localparam  v_total  = 640;
+localparam  h_image_pixel = 85;
+localparam  v_image_pixel = 116;
 
-//Check if we can create RGB colors
-always @(posedge clk_sys)
+localparam   h_image_start = 198;
+localparam   h_image_finish = 283;
+localparam   v_image_start = 262;
+localparam   v_image_finish = 378;
+
+// Draw in the frame the image, canvas otherwise
+always @(posedge clk_sys) begin
   if (display_en) begin
-    if ( (h_count >= h_square_start-1  && h_count <= h_square_finish)
-        && ( v_count >= v_square_start-1 &&  v_count <= v_square_finish))
+      if ((v_count > v_image_start-1 && v_count < v_image_finish-1)
+       && (h_count > h_image_start-1 && h_count < h_image_finish-1))
         begin
-        //Canvas color
+        //Image
+        r1 <= rgb_out[0];
+        r2 <= rgb_out[1];
+        g1 <= rgb_out[2];
+        g2 <= rgb_out[3];
+        b1 <= rgb_out[4];
+        b2 <= rgb_out[5];
+        /*
         r1 <= 1'b1;
         r2 <= 1'b1;
-        g1 <= 1'b0;
-        g2 <= 1'b0;
+        g1 <= 1'b1;
+        g2 <= 1'b1;
         b1 <= 1'b0;
         b2 <= 1'b0;
+        */
         end
-    //else begin
+    else begin
+      //Canvas color
       r1 <= 1'b1;
-      r2 <= 1'b1;
+      r2 <= 1'b0;
       g1 <= 1'b1;
-      g2 <= 1'b1;
+      g2 <= 1'b0;
       b1 <= 1'b1;
       b2 <= 1'b1;
-    //  end
+    end
   end
-
+  else begin
+  // Pixels out of display
+  r1 <= 1'b0;
+  r2 <= 1'b0;
+  g1 <= 1'b0;
+  g2 <= 1'b0;
+  b1 <= 1'b0;
+  b2 <= 1'b0;
+  end
+end
 
 /*
 always @(clk_sys)begin
   if (reset)
     addr_counter <= 0;
   else begin
-    if (addr_counter >= 256)
+    if (v_counter > v_image_start-1 && (h_counter > h_image_start && h_counter < h_image_finish))
+    if (addr_counter >= 116)
       addr_counter <= 0;
     else
       addr_counter <= addr_counter + 1;
@@ -99,19 +121,18 @@ vga_sync vga_s(
       .locked(locked_led)      // PLL signal, '1' => OK
       );
 
-/*
-ram  #(
+
+ram #(
        .AddressWidth(AddressWidth),
        .DataWidth(DataWidth)
-      )image_ram
+      )ram
       (
-               .clk(clk_sys),
-               .rw(rw), //Read '1', write '0'
-               .addr(addr),
-               .data_in(data_in),
-               . data_out(data_out)
-             );
-*/
+       .clk(clk_sys),
+       .rw(rw), //Read '1', write '0'
+       .addr(addr),
+       .data_in(data_in),
+       .data_out(data_out)
+       );
 
 
 endmodule
