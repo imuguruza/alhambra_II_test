@@ -2,8 +2,8 @@
 // 256x256 RAM for storing image
 
 module ram #(
-         parameter AddressWidth = 16,
-         parameter DataWidth   = 256,
+         parameter AddressWidth = 14,
+         parameter DataWidth   = 8,
          parameter ROMFILE = "image.list"
         )
        (
