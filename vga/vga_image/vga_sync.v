@@ -23,6 +23,7 @@ module vga_sync(
       output wire locked
       );
 
+// Disabel in simulation
 wire locked;
 wire sys_clk;
 
