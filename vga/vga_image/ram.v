@@ -4,7 +4,7 @@
 module ram #(
          parameter AddressWidth = 14,
          parameter DataWidth   = 8,
-         parameter ROMFILE = "image.list"
+         parameter ROMFILE = "bender.mem"
         )
        (
          input        clk,
