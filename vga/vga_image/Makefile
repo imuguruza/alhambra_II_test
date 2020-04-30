@@ -2,12 +2,12 @@ NAME = vga_image
 DEPS = vga_sync
 DEPS2 = pll
 DEPS3 = ram
-SIM = vga_sync
+SIM = vga_image
 
 
 sim: $(SIM)_tb.vcd
 
-$(SIM)_tb.vcd: $(SIM).v $(SIM)_tb.v
+$(SIM)_tb.vcd: $(DEPS3).v $(DEPS).v $(SIM).v $(SIM)_tb.v
 
 	#-- Compile
 	iverilog $^ -o $(SIM)_tb.out
