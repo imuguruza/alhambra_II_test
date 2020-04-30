@@ -1,0 +1,46 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Thu Apr 30 13:58:03 2020
+[*]
+[dumpfile] "/home/inigo/Documents/fpga/alhambra_II_test/vga/vga_image/vga_image_tb.vcd"
+[dumpfile_mtime] "Thu Apr 30 13:51:51 2020"
+[dumpfile_size] 71592616
+[savefile] "/home/inigo/Documents/fpga/alhambra_II_test/vga/vga_image/vga_image_tb.gtkw"
+[timestart] 6724000
+[size] 1920 1025
+[pos] -1 -1
+*-19.466318 9310600 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] vga_image_tb.
+[sst_width] 223
+[signals_width] 222
+[sst_expanded] 1
+[sst_vpaned_height] 302
+@28
+vga_image_tb.clk_in
+@200
+-
+-Pixel Count
+@24
+vga_image_tb.dut.h_count[9:0]
+vga_image_tb.dut.v_count[9:0]
+@200
+-
+-VGA SYNC
+@28
+vga_image_tb.v_sync
+vga_image_tb.h_sync
+@200
+-
+-RGB OUT
+@22
+vga_image_tb.rgb_port[8:0]
+@200
+-
+-RAM
+@25
+vga_image_tb.dut.addr[13:0]
+@22
+vga_image_tb.dut.pixel_row_current[7:0]
+vga_image_tb.dut.w_data_out[7:0]
+[pattern_trace] 1
+[pattern_trace] 0
