@@ -23,13 +23,9 @@ wire [9:0] v_count;
 localparam  AddressWidth = 14; // 2^11 = 16384
 localparam  DataWidth = 8; //
 reg [AddressWidth-1:0] addr = 0;
-reg [AddressWidth-1:0] addr_counter = 0;
 reg [DataWidth-1:0]  data_in;
 //reg [DataWidth-1:0]  data_out;
 wire [DataWidth-1:0]  w_data_out;
-
-reg [DataWidth-1:0]  pixel_row_current;
-reg [DataWidth-1:0]  pixel_row_next;
 
 reg [7:0]  rgb_out;
 
