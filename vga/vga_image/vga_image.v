@@ -3,15 +3,10 @@
 module vga_image(
     input wire clk_in,
     input wire reset,
-    output reg r1,
-    output reg r2,
-    output reg b1,
-    output reg b2,
-    output reg g1,
-    output reg g2,
+    output reg [8:0] rgb_port,
     output wire h_sync,
     output wire v_sync,
-    output wire led,
+    output wire clk_led,
     output wire locked_led
   );
 
@@ -21,93 +16,69 @@ wire display_en;
 wire [9:0] h_count;
 //reg [9:0] v_count;
 wire [9:0] v_count;
-assign  led = clk_sys;
 
 
 // RAM interfacing
-// 510 x 85
-localparam  AddressWidth = 9; // 2^7 = 128
-localparam  DataWidth = 512;
-reg [AddressWidth-1:0] addr;
+// 100x (100 x 8)
+localparam  AddressWidth = 14; // 2^11 = 16384
+localparam  DataWidth = 8; //
+reg [AddressWidth-1:0] addr = 0;
 reg [AddressWidth-1:0] addr_counter = 0;
 reg [DataWidth-1:0]  data_in;
-reg [DataWidth-1:0]  data_out;
+//reg [DataWidth-1:0]  data_out;
+wire [DataWidth-1:0]  w_data_out;
 
 reg [DataWidth-1:0]  pixel_row_current;
 reg [DataWidth-1:0]  pixel_row_next;
 
-reg [6-1:0]  rgb_out = 5'h3F;
+reg [7:0]  rgb_out;
 
 reg rw = 1; // Set enabled read of RAM
 
 
-localparam  h_total  = 480;
-localparam  v_total  = 640;
-localparam  h_image_pixel = 85;
-localparam  v_image_pixel = 116;
+localparam  h_total  = 640;
+localparam  v_total  = 480;
+localparam  h_image_pixel = 100;
+localparam  v_image_pixel = 100;
 
-localparam   h_image_start = 198;
-localparam   h_image_finish = 283;
-localparam   v_image_start = 262;
-localparam   v_image_finish = 378;
+localparam addr_amount = 10000;
+
+// Calculate where the image nees to be drawn
+localparam   h_image_start = h_total/2 - h_image_pixel/2;
+localparam   h_image_finish = h_total/2 + h_image_pixel/2;
+localparam   v_image_start = v_total/2 - v_image_pixel/2;
+localparam   v_image_finish = v_total/2 + v_image_pixel/2;
+
+// Load the image from RAM
+always @(posedge clk_sys) begin
+      if ((v_count >= v_image_start-1 && v_count < v_image_finish-1)
+       && (h_count >= h_image_start-1 && h_count < h_image_finish-1))
+       begin
+        //Load Image from RAM
+        rgb_out <= w_data_out;
+        addr <= addr + 1;//Load new row pixel
+        if (addr >= addr_amount -1)//Out of bounce, go to 0
+          addr <= 0;
+      end
+end
 
 // Draw in the frame the image, canvas otherwise
 always @(posedge clk_sys) begin
   if (display_en) begin
       if ((v_count > v_image_start-1 && v_count < v_image_finish-1)
        && (h_count > h_image_start-1 && h_count < h_image_finish-1))
-        begin
         //Image
-        r1 <= rgb_out[0];
-        r2 <= rgb_out[1];
-        g1 <= rgb_out[2];
-        g2 <= rgb_out[3];
-        b1 <= rgb_out[4];
-        b2 <= rgb_out[5];
-        /*
-        r1 <= 1'b1;
-        r2 <= 1'b1;
-        g1 <= 1'b1;
-        g2 <= 1'b1;
-        b1 <= 1'b0;
-        b2 <= 1'b0;
-        */
-        end
-    else begin
-      //Canvas color
-      r1 <= 1'b1;
-      r2 <= 1'b0;
-      g1 <= 1'b1;
-      g2 <= 1'b0;
-      b1 <= 1'b1;
-      b2 <= 1'b1;
-    end
-  end
-  else begin
+        rgb_port <= {1'b0,rgb_out};
+      else
+      rgb_port <= 9'b01111111;
+  end else
   // Pixels out of display
-  r1 <= 1'b0;
-  r2 <= 1'b0;
-  g1 <= 1'b0;
-  g2 <= 1'b0;
-  b1 <= 1'b0;
-  b2 <= 1'b0;
-  end
+  rgb_port <= 9'b000000000;
 end
 
-/*
-always @(clk_sys)begin
-  if (reset)
-    addr_counter <= 0;
-  else begin
-    if (v_counter > v_image_start-1 && (h_counter > h_image_start && h_counter < h_image_finish))
-    if (addr_counter >= 116)
-      addr_counter <= 0;
-    else
-      addr_counter <= addr_counter + 1;
-    end
-end
-*/
 
+//Blink Led with clk
+assign  clk_led = clk_sys;
 
 vga_sync vga_s(
       .clk_in(clk_in),         //12MHz clock input
@@ -121,17 +92,17 @@ vga_sync vga_s(
       .locked(locked_led)      // PLL signal, '1' => OK
       );
 
-
 ram #(
        .AddressWidth(AddressWidth),
-       .DataWidth(DataWidth)
+       .DataWidth(DataWidth),
+       .ROMFILE("bender.mem")
       )ram
       (
        .clk(clk_sys),
        .rw(rw), //Read '1', write '0'
        .addr(addr),
        .data_in(data_in),
-       .data_out(data_out)
+       .data_out(w_data_out)
        );
 
 
