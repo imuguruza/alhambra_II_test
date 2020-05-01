@@ -1,3 +1,29 @@
+// Copyright 2020 Iñigo Muguruza Goenaga
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/*
+  VGA IMAGE module
+  ================
+
+  - Instantiates vga_sync for sync signal generation
+  - Creates canvas color
+  - Reads RAM memory and displays image in pixel range
+  - Lokecd Led => Shows if PLL is working right, debugging purposes
+  - CLK LED => LED assigned to 25MHz clock, debugging purposes
+  - Color format: RRRGGBB
+
+*/
 `default_nettype none
 
 module vga_image(
@@ -19,8 +45,8 @@ wire [9:0] v_count;
 
 
 // RAM interfacing
-// 100x (100 x 8)
-localparam  AddressWidth = 14; // 2^11 = 16384
+// (100 pixel x 8 bits color) x 100 pixel
+localparam  AddressWidth = 14; // 2^14 = 16384
 localparam  DataWidth = 8; //
 reg [AddressWidth-1:0] addr = 0;
 reg [DataWidth-1:0]  data_in;
@@ -37,7 +63,7 @@ localparam  v_total  = 480;
 localparam  h_image_pixel = 100;
 localparam  v_image_pixel = 100;
 
-localparam addr_amount = 10000;
+localparam addr_amount = 10000; // Total pixel amount 100x100
 
 // Calculate where the image nees to be drawn
 localparam   h_image_start = h_total/2 - h_image_pixel/2;

@@ -1,5 +1,5 @@
 
-// 256x256 RAM for storing image
+// RAM for storing image
 
 module ram #(
          parameter AddressWidth = 14,
