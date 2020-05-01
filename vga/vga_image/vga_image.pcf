@@ -7,15 +7,15 @@ set_io h_sync 10
 #-------------
 # VGA rgb signals
 #-------------
-set_io rgb_port[8] 1
-set_io rgb_port[6] 2
-set_io rgb_port[7] 20
-set_io rgb_port[3] 3
-set_io rgb_port[4] 4
-set_io rgb_port[5] 22
-set_io rgb_port[0] 7
-set_io rgb_port[1] 8
-set_io rgb_port[2] 19
+set_io rgb_port[7] 1
+set_io rgb_port[5] 2
+set_io rgb_port[6] 20
+set_io rgb_port[2] 3
+set_io rgb_port[3] 4
+set_io rgb_port[4] 22
+set_io rgb_port[8] 7
+set_io rgb_port[0] 8
+set_io rgb_port[1] 19
 
 #-------------
 set_io clk_led 45

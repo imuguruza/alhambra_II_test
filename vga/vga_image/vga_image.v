@@ -64,9 +64,9 @@ always @(posedge clk_sys) begin
       if ((v_count > v_image_start-1 && v_count < v_image_finish-1)
        && (h_count > h_image_start-1 && h_count < h_image_finish-1))
         //Image
-        rgb_port <= {1'b0,rgb_out};
+        rgb_port <= {1'b1,rgb_out};
       else
-      rgb_port <= 9'b01111111;
+      rgb_port <= 9'b10111111;
   end else
   // Pixels out of display
   rgb_port <= 9'b000000000;
