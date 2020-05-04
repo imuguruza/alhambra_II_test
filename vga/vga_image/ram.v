@@ -4,7 +4,7 @@
 module ram #(
          parameter AddressWidth = 14,
          parameter DataWidth   = 8,
-         parameter ROMFILE = "bender.mem"
+         parameter RAMFILE = "bender.mem"
         )
        (
          input        clk,
@@ -29,7 +29,7 @@ always @(posedge clk) begin
 end
 
 initial begin
-  $readmemh(ROMFILE, ram);
+  $readmemh(RAMFILE, ram);
 end
 
 endmodule

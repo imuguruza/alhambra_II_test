@@ -117,7 +117,7 @@ vga_sync vga_s(
 ram #(
        .AddressWidth(AddressWidth),
        .DataWidth(DataWidth),
-       .ROMFILE("bender.mem")
+       .RAMFILE("bender.mem")
       )ram
       (
        .clk(clk_sys),
