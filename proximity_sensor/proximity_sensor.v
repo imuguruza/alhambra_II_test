@@ -14,6 +14,6 @@ module proximity_sensor (
 
 //If enable is ON, read pin value, otherwise high-impedances
 always @(posedge clk)
-    value <= (enable) ? pin : 1'bz;
+    value <= (enable) ? ~pin : 1'bz;
 
 endmodule
