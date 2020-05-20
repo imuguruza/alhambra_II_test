@@ -1,0 +1,44 @@
+CAPI=2:
+
+name : ::vgaimgreceiver:0
+
+filesets:
+  baudgen_sim:
+    files:
+      - rtl/baudgen.v
+      - "!tool_iverilator? (bench/baudgen_tb.v)"
+    file_type : verilogSource
+
+  uartrx_sim:
+    files:
+      - rtl/baudgen.v
+      - rtl/uart_rx.v
+      - "!tool_iverilator? (bench/uart_rx_tb.v)"
+    file_type : verilogSource
+
+targets:
+  default:
+    filesets : [uartrx_sim]
+
+  baudgen_tb:
+    default_tool: icarus
+    filesets : [baudgen_sim]
+    parameters : [clk_freq=100, baud=10]
+    toplevel : baudgen_tb
+
+  uartrx_tb:
+    default_tool: icarus
+    filesets : [uartrx_sim]
+    parameters : [clk_freq=100, baud=10]
+    toplevel : uart_rx_tb
+
+parameters:
+  clk_freq:
+    datatype : int
+    description : system clk frequency
+    paramtype : vlogparam
+
+  baud:
+    datatype : int
+    description : communication baud value
+    paramtype : vlogparam
