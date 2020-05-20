@@ -1,77 +1,92 @@
-/*
-    UART Receiver
-    ==============
-    Reades RX line and offers the data in the output.
-    8 bit, comm assumed
-
-    - Input: CLK
-    - Input: Reset
-    - Input: RX, read data wire
-    - Output: data_rdy, flag to grab data
-    - Output: Received 8 bit data
-
-    `ifdef SIMULATION
-
-*/
-
+//-- Fichero: uart_rx.v
 `default_nettype none
 
-module uart_receiver(
-                input wire clk,
-                input wire reset,
+module uart_rx (input wire clk,
+                input wire rst,
                 input wire rx,
-                output reg data_rdy,
-                output reg[7:0] data
-              );
+                output reg data_rdy,// Data ready flag
+                output reg [7:0] data); // Data
 
-//Assign value in Fusesoc core?
-param clk_freq;
-param baud_speed;
-
-reg reset_baud;
-reg clear;   //-- Poner a cero contador de bits
-reg load;    //-- Cargar dato recibido
+// Defaults
+parameter clk_freq = 12000000;
+parameter baud = 115200;
 
 
-baudgen
- #( //Reduce with this value counting time
-   .clk_hz(clk_freq),
-   .baud(baud_speed)
- )
- baudgenerator(
-  .clk(clk_in),
-  .reset(reset_baud),
-  .baud_tick(tick)
- );
+wire baud_tick;
+reg rx_r;
 
-reg [1:0] state;
-//-- Received bit counter
-reg [3:0] counter;
+// Microorders
+reg en;      // Enable baud tick gen
+reg clear;   // Clear read bit counter
+reg load;    // Load data
+
+
+// Register RX lane
+always @(posedge clk)
+  rx_r <= rx;
+
+//-- Instantiate baud ticks to read data
+baudgen #(
+            .clk_freq(clk_freq),
+            .baud(baud)
+            )
+  baudgen0 (
+    .clk(clk),
+    .en(en),
+    .baud_tick(baud_tick)
+  );
+
+//-- Bit counter
+reg [3:0] bitc;
 
 always @(posedge clk)
   if (clear)
-    counter <= 4'd0;
-  else if (clear == 0 && tick == 1)
-    counter <= counter + 1;
+    bitc <= 4'd0;
+  else if (clear == 0 && baud_tick == 1)
+    bitc <= bitc + 1;
 
-//State machine controller
-//-------------------------
-localparam IDLE = 2'b00;
-localparam READ = 2'b01;
-localparam LOAD = 2'd10;
-localparam DAV =  2'b11;
+
+//-- Data register start + data + stop
+reg [9:0] raw_data;
 
 always @(posedge clk)
-  if (reset == 0)
+  if (baud_tick == 1) begin
+    raw_data = {rx_r, raw_data[9:1]};
+  end
+
+//-- Load data to out
+always @(posedge clk)
+  if (rst == 1)
+    data <= 0;
+  else if (load)
+    data <= raw_data[8:1];
+
+
+// CONTROLLER
+localparam IDLE = 2'd0;  // Idle state
+localparam RECV = 2'd1;  // Read state
+localparam LOAD = 2'd2;  // Load received data
+localparam DAV = 2'd3;   // Data enale state, flag to fetch data
+
+reg [1:0] state;
+
+// Transitions
+always @(posedge clk)
+
+  if (rst == 1)
     state <= IDLE;
+
   else
     case (state)
-      //Wait for asserting the line
       IDLE :
-        state <= rx ? RECV : IDLE;
+        // Check if start has happened
+        if (rx_r == 0)
+          state <= RECV;
+        else
+          state <= IDLE;
       RECV:
-        //-- Vamos por el ultimo bit: pasar al siguiente estado
-        if (counter == 4'd10)
+        //-- Stay here till 10 bit are read
+        if (bitc == 4'd10)
           state <= LOAD;
         else
           state <= RECV;
@@ -82,30 +97,14 @@ always @(posedge clk)
     default:
       state <= IDLE;
     endcase
-//-------------------------
 
-//-- Registro de desplazamiento para almacenar los bits recibidos
-//--------------------------
-reg [9:0] raw_data;
-
-always @(posedge clk)
-  if (tick == 1) begin
-    raw_data = {rx, raw_data[9:1]};
-  end
-//-- Registro de datos. Almacenar el dato recibido
-always @(posedge clk)
-  if (reset == 1)
-    data <= 0;
-  else if (load)
-    data <= raw_data[8:1];
-//--------------------------
-
-//-- Set flags
+// Set outputs
 always @* begin
-  reset_baud <= (state == RECV) ? 1 : 0;
+  en <= (state == RECV) ? 1 : 0;
   clear <= (state == IDLE) ? 1 : 0;
   load <= (state == LOAD) ? 1 : 0;
-  rcv <= (state == DAV) ? 1 : 0;
+  data_rdy <= (state == DAV) ? 1 : 0;
 end
+
 
 endmodule
