@@ -1,4 +1,3 @@
-//-- Fichero: uart_rx.v
 `default_nettype none
 
 module uart_rx (input wire clk,
