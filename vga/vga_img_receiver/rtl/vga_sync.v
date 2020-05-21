@@ -38,10 +38,6 @@ module vga_sync(
       output wire locked
       );
 
-// Disable in simulation
-wire locked;
-//-----------------
-
 wire sys_clk;
 
 // Pixel counters
@@ -60,6 +56,18 @@ localparam  v_pixel_display            = 480;
 localparam  v_pixel_front_porch_amount = 10;
 localparam  v_pixel_sync_amount        = 2;
 localparam  v_pixel_back_porch_amount  = 33;
+
+
+`ifdef SIM
+  assign sys_clk = clk_in;
+`else
+  wire locked;
+  pll sys_clock(
+	   .clock_in(clk_in),
+	   .clock_out(sys_clk),
+	   .locked(locked)
+	   );
+`endif
 
 
 always @(posedge sys_clk) begin
@@ -114,6 +122,7 @@ always @ (posedge sys_clk) begin
   v_count <= v_counter;
 end
 
+/*
 assign clk_sys = sys_clk;
 
 // Dissable this in simulation
@@ -121,9 +130,6 @@ pll sys_clock(
 	.clock_in(clk_in),
 	.clock_out(sys_clk),
 	.locked(locked)
-	);
-
-//ONLY IN simulation
-//assign sys_clk = clk_in;
+	);*/
 
 endmodule
