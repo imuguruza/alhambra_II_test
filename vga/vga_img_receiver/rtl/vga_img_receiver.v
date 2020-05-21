@@ -57,9 +57,9 @@ reg rw = 1;
 
 // RX
 // Data read from RX lane
-reg [7:0]  rx_data;
+wire [7:0]  rx_data;
 //Cross-clock domain flip flops
-reg data_rdy;
+wire data_rdy;
 reg data_rdy_rx;
 reg data_rdy_ram_prev;
 reg data_rdy_ram;
