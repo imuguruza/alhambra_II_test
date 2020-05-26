@@ -16,6 +16,7 @@ filesets:
       - "!tool_iverilator? (bench/uart_rx_tb.v)"
     file_type : verilogSource
 
+
 targets:
   default:
     filesets : [uartrx_sim]
