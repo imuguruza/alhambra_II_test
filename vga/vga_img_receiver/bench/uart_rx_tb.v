@@ -1,17 +1,23 @@
+`default_nettype none
+
 module uart_rx_tb();
 
-parameter baud = 100; //Bauds, each bit will take 10 clock cycles
-parameter  clk_freq = 1000; //1 MHz system clk
+parameter baud = 0; //Bauds, each bit will take 10 clock cycles
+parameter  clk_freq = 0; //1 MHz system clk
 //-- Tics de reloj para envio de datos a esa velocidad
 //-- Se multiplica por 2 porque el periodo del reloj es de 2 unidades
-localparam BITRATE = (baud << 1);
-//localparam BITRATE = baud;
+
+localparam BITRATE = (clk_freq/baud << 1);
 
 //-- Tics necesarios para enviar una trama serie completa, mas un bit adicional
 localparam FRAME = (BITRATE * 10);
 
 //-- Tiempo entre dos bits enviados
 localparam FRAME_WAIT = (BITRATE * 4);
+
+
+
+integer  CHAR = "";
 
 //----------------------------------------
 //-- Tarea para enviar caracteres serie
@@ -59,19 +65,35 @@ uart_rx #(.clk_freq(clk_freq),
 always
   # 1 clk <= ~clk;
 
-
 //-- Proceso al inicio
 initial begin
 
   //-- Fichero donde almacenar los resultados
   $dumpfile("uart_rx_tb.vcd");
   $dumpvars(0, uart_rx_tb);
+  $display ("\t\t========================  ");
+  $display ("\t\t Starting simulation...   ");
+  $display ("\t\t========================  ");
 
   //-- Enviar datos de prueba
-  #BITRATE    send_car(8'h55);
-  #FRAME_WAIT send_car("K");
+  CHAR = 8'h55;
+  #BITRATE    send_car(CHAR);
+  //->rdy_trigger;
+  //wait(rdy)
+  if ( data == CHAR) $display ("\t\tData received = %x, OK!   \n", data);
+  else               $display ("\t\tData received = %x, ERROR!\n", data);
 
-  #(FRAME_WAIT*4) $display("END of simulation");
+  CHAR = "K";
+  #FRAME_WAIT send_car(CHAR);
+  #BITRATE
+  if ( data == CHAR) $display ("\t\tData received = %x, OK!   \n", data);
+  else               $display ("\t\tData received = %x, ERROR!\n", data);
+
+  //->rdy_trigger;
+  #(FRAME_WAIT*4)  $display  ("\t\t========================");
+                   $display  ("\t\t END of simulation"      );
+                   $display  ("\t\t========================");
   $finish;
 end
+
 endmodule
