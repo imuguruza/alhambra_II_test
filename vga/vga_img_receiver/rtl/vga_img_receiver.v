@@ -68,14 +68,6 @@ reg data_rdy_ram;
 reg [AddressWidth-1:0] write_addr = 0;
 reg [AddressWidth-1:0] read_addr = 0;
 
-// synchronize read ready flag to sys_clk clock domain
-// Pass three times, so with the last two
-// we can detect a posedge
-always @(posedge clk_sys) begin
-	data_rdy_rx       <= data_rdy_rx;;
-	data_rdy_ram_prev <= data_rdy_rx;
-  data_rdy_ram      <= data_rdy_ram_prev;
-end
 
 /*
 always @(posedge clk_sys) begin
@@ -94,6 +86,19 @@ always @(posedge clk_sys) begin
 end
 */
 
+// Create slower SIM clock for UART
+`ifdef SIM
+reg sim_clk;
+reg [1:0] clk_count;
+always @ (posedge clk_in) begin
+  if (clk_count == 2'd2)
+    clk_count <= 0;
+  else
+    clk_count <= clk_count + 1;
+end
+assign sim_clk = clk_count[1];
+`endif
+
 //Blink Led with clk
 assign  clk_led = clk_sys;
 
@@ -101,7 +106,11 @@ assign  clk_led = clk_sys;
             .clk_freq(clk_freq),
             .baud(baud)
       )rx0(
+`ifdef SIM
+            .clk(sim_clk),           //Board 12MHz clk
+`else
             .clk(clk_in),           //Board 12MHz clk
+`endif
             .rst(reset),            // Board rst button
             .rx(rx),                //Board rx lane
             .data_rdy(data_rdy),    // Data ready flag
@@ -147,6 +156,17 @@ always @(posedge clk_sys) begin
 end
 */
 
+// synchronize read ready flag to sys_clk clock domain
+// Pass three times, so with the last two
+// we can detect a posedge
+always @(posedge clk_sys) begin
+	data_rdy_rx       <= data_rdy_rx;;
+	data_rdy_ram_prev <= data_rdy_rx;
+  data_rdy_ram      <= data_rdy_ram_prev;
+end
+
+// UART RX State Machine
+//----------------------//
 
 // CONTROLLER
 localparam IDLE  = 1'b0;  // Idle state
@@ -155,7 +175,11 @@ localparam WRITE = 1'b1;  // write state
 reg [1:0] state;
 
 // Transitions
-always @(posedge clk_sys)
+`ifdef SIM
+always @(posedge sim_clk)
+`else
+always @(posedge clk_in)
+`endif`
 begin
   if (reset == 1)
         state <= IDLE;
@@ -183,6 +207,8 @@ always @* begin
 end
 
 
+// Display image
+//----------------//
 
 // Load the image from RAM if RW=1 otherwise write
 always @(posedge clk_sys) begin
@@ -225,6 +251,4 @@ always @(posedge clk_sys) begin
    // Pixels out of display
    rgb_port <= 9'b000000000;
 end
-
-
-  endmodule
+endmodule
