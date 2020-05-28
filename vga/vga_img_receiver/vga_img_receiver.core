@@ -17,6 +17,16 @@ filesets:
     file_type : verilogSource
 
 
+  img_sim:
+    files:
+      - rtl/baudgen.v
+      - rtl/uart_rx.v
+      - rtl/ram.v
+      - rtl/vga_sync.v
+      - rtl/vga_img_receiver.v
+      - "!tool_iverilator? (bench/vga_img_receiver_tb.v)"
+    file_type : verilogSource
+
 targets:
   default:
     filesets : [uartrx_sim]
@@ -24,14 +34,23 @@ targets:
   baudgen_tb:
     default_tool: icarus
     filesets : [baudgen_sim]
-    parameters : [clk_freq=100, baud=10]
+    parameters : [clk_freq=12000000, baud=115200, SIM=1]
     toplevel : baudgen_tb
 
   uartrx_tb:
     default_tool: icarus
     filesets : [uartrx_sim]
-    parameters : [clk_freq=100, baud=10]
+    parameters : [clk_freq=12000000, baud=115200]
     toplevel : uart_rx_tb
+    tools:
+      icarus:
+            iverilog_options : [-DSIM=1]
+
+  top_tb:
+    default_tool: icarus
+    filesets : [img_sim]
+    parameters : [clk_freq=200, baud=10, SIM=1]
+    toplevel : vga_img_receiver_tb
 
 parameters:
   clk_freq:
@@ -42,4 +61,9 @@ parameters:
   baud:
     datatype : int
     description : communication baud value
+    paramtype : vlogparam
+
+  SIM:
+    datatype : int
+    description : enable SIM preprocessor flag
     paramtype : vlogparam
