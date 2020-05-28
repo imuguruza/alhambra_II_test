@@ -1,6 +1,5 @@
 `default_nettype none
 `timescale 1 ns/1 ns  // time-unit = 1 ns, precision = 10 ps
-`define SIM 1
 
 module vga_image_receiver_tb();
 
