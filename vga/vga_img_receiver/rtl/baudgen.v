@@ -1,10 +1,8 @@
-/*
-    Baud Generator
-    ==============
-    Creates out of system clk ticks in specific bauds
-*/
-`default_nettype none
-
+//
+//    Baud Generator
+//    ==============
+//    Creates out of system clk ticks in specific bauds
+//
 module baudgen(
                 input wire clk,
                 input wire en,
@@ -22,7 +20,7 @@ reg [N-1:0] counter = 0;
 
 always @(posedge clk)
   if (en)
-    counter <= (counter == max_count - 1) ? 0 : counter + 1;//Count or if it's at max, restart counting
+    counter <= (counter < max_count - 1) ? counter + 1 : 0;//Count or if it's at max, restart counting
   else
     counter <= counter; //Hold value
 
