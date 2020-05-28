@@ -23,9 +23,6 @@
     pixel position in display (h,v)
 */
 
-`default_nettype none
-
-
 module vga_sync(
       input  wire clk_in,
       input  wire reset,
