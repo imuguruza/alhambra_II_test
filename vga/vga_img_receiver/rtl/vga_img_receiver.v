@@ -1,6 +1,6 @@
 `default_nettype none
 
-module vga_image_receiver(
+module vga_img_receiver(
     input  wire      clk_in,
     input  wire      reset,
     input  wire      rx,
@@ -14,7 +14,8 @@ module vga_image_receiver(
 // PARAMETERS
 //-----------------------------------------------------------
 
-parameter img_file = "../data/bender.mem";
+//parameter img_file = "../data/bender.mem";
+parameter img_file = "bender.mem";
 
 //UART parameters
 parameter clk_freq = 12000000;
@@ -96,7 +97,7 @@ always @ (posedge clk_in) begin
   else
     clk_count <= clk_count + 1;
 end
-assign sim_clk = clk_count[1];
+always @ (posedge clk_in) sim_clk <= clk_count[1];
 `endif
 
 //Blink Led with clk
@@ -179,7 +180,7 @@ reg [1:0] state;
 always @(posedge sim_clk)
 `else
 always @(posedge clk_in)
-`endif`
+`endif
 begin
   if (reset == 1)
         state <= IDLE;
