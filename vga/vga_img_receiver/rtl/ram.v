@@ -4,7 +4,7 @@
 module ram #(
          parameter AddressWidth = 14,
          parameter DataWidth   = 8,
-         parameter RAMFILE = "../data/bender.mem"
+         parameter RAMFILE = "file.mem"
         )
        (
          input        clk,
