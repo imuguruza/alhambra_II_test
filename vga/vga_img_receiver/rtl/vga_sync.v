@@ -58,7 +58,7 @@ localparam  v_pixel_back_porch_amount  = 33;
 `ifdef SIM
   assign sys_clk = clk_in;
 `else
-  wire locked;
+  //wire locked;
   pll sys_clock(
 	   .clock_in(clk_in),
 	   .clock_out(sys_clk),
