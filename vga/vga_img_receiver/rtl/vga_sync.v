@@ -35,7 +35,7 @@ module vga_sync(
       output wire locked
       );
 
-wire sys_clk;
+//wire sys_clk;
 
 // Pixel counters
 reg [9:0] h_counter = 0;
@@ -56,18 +56,18 @@ localparam  v_pixel_back_porch_amount  = 33;
 
 
 `ifdef SIM
-  assign sys_clk = clk_in;
+  assign clk_sys = clk_in;
 `else
   //wire locked;
   pll sys_clock(
 	   .clock_in(clk_in),
-	   .clock_out(sys_clk),
+	   .clock_out(clk_sys),
 	   .locked(locked)
 	   );
 `endif
 
 
-always @(posedge sys_clk) begin
+always @(posedge clk_sys) begin
 
   if (reset) begin
     //Reset counter values
@@ -98,7 +98,7 @@ always @(posedge sys_clk) begin
   end
 end
 
-always @(posedge sys_clk) begin
+always @(posedge clk_sys) begin
   // Check if sync_pulse needs to be created
   if (h_counter >= (h_pixel_display + h_pixel_front_porch_amount)
       && h_counter < (h_pixel_display + h_pixel_front_porch_amount + h_pixel_sync_amount) )
@@ -114,7 +114,7 @@ always @(posedge sys_clk) begin
 end
 
 // Route h_/v_counter to out
-always @ (posedge sys_clk) begin
+always @ (posedge clk_sys) begin
   h_count <= h_counter;
   v_count <= v_counter;
 end
