@@ -27,6 +27,7 @@ filesets:
       - rtl/vga_sync.v
       - rtl/vga_img_receiver.v
       - bench/vga_img_receiver_tb.v
+      - data/test.mem : {copyto : test.mem, file_type : file}     #TODO, which kind of file_type is the RAM init file?
       - data/bender.mem : {copyto : bender.mem, file_type : file} #TODO, which kind of file_type is the RAM init file?
     file_type : verilogSource
 
