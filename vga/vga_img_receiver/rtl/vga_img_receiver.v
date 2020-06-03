@@ -64,6 +64,7 @@ wire data_rdy;
 reg data_rdy_rx;
 reg data_rdy_ram_prev;
 reg data_rdy_ram;
+reg data_rdy_new;
 
 // Read and write addresses
 reg [AddressWidth-1:0] write_addr = 0;
@@ -90,7 +91,7 @@ end
 // Create slower SIM clock for UART
 `ifdef SIM
 reg sim_clk;
-reg [1:0] clk_count;
+reg [1:0] clk_count = 0;
 always @ (posedge clk_in) begin
   if (clk_count == 2'd2)
     clk_count <= 0;
@@ -161,9 +162,10 @@ end
 // Pass three times, so with the last two
 // we can detect a posedge
 always @(posedge clk_sys) begin
-	data_rdy_rx       <= data_rdy_rx;;
+	data_rdy_rx       <= data_rdy;
 	data_rdy_ram_prev <= data_rdy_rx;
   data_rdy_ram      <= data_rdy_ram_prev;
+  data_rdy_new      <= data_rdy_ram;
 end
 
 // UART RX State Machine
@@ -187,7 +189,8 @@ begin
   else
     case (state)
       IDLE :
-        if (data_rdy_ram_prev == 0 && data_rdy_ram == 1 && write_addr == 0)
+        //if (data_rdy_ram_prev == 0 && data_rdy_ram == 1 && write_addr == 0)
+        if (data_rdy== 0 && data_rdy_new == 1 && write_addr == 0)
           state <= WRITE;
         else
           state <= IDLE;
