@@ -66,6 +66,11 @@ reg data_rdy_ram_prev;
 reg data_rdy_ram;
 reg data_rdy_new;
 
+reg rx_reg;
+reg rx_reg_prev;
+reg rx_reg_prev_2;
+reg rx_reg_prev_3;
+
 // Read and write addresses
 reg [AddressWidth-1:0] write_addr = 0;
 reg [AddressWidth-1:0] read_addr = 0;
@@ -166,6 +171,11 @@ always @(posedge clk_sys) begin
 	data_rdy_ram_prev <= data_rdy_rx;
   data_rdy_ram      <= data_rdy_ram_prev;
   data_rdy_new      <= data_rdy_ram;
+
+  rx_reg_prev_3 <= rx;
+  rx_reg_prev_2 <= rx_reg_prev_3;
+  rx_reg_prev   <= rx_reg_prev_2;
+  rx_reg        <= rx_reg_prev;
 end
 
 // UART RX State Machine
@@ -190,7 +200,8 @@ begin
     case (state)
       IDLE :
         //if (data_rdy_ram_prev == 0 && data_rdy_ram == 1 && write_addr == 0)
-        if (data_rdy== 0 && data_rdy_new == 1 && write_addr == 0)
+        //if (data_rdy== 0 && data_rdy_new == 1 && write_addr == 0)
+        if (rx_reg_prev_3 == 1 && rx_reg == 0 && write_addr == 0) //Start condidition
           state <= WRITE;
         else
           state <= IDLE;
