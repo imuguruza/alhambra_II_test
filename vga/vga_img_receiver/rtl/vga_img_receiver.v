@@ -61,15 +61,15 @@ reg rw = 1;
 wire [7:0]  rx_data;
 //Cross-clock domain flip flops
 wire data_rdy;
-reg data_rdy_rx;
-reg data_rdy_ram_prev;
-reg data_rdy_ram;
-reg data_rdy_new;
+reg data_rdy_rx       = 0;
+reg data_rdy_ram_prev = 0;
+reg data_rdy_ram      = 0;
+reg data_rdy_new      = 0;
 
-reg rx_reg;
-reg rx_reg_prev;
-reg rx_reg_prev_2;
-reg rx_reg_prev_3;
+reg rx_reg        = 0;
+reg rx_reg_prev   = 0;
+reg rx_reg_prev_2 = 0;
+reg rx_reg_prev_3 = 0;
 
 // Read and write addresses
 reg [AddressWidth-1:0] write_addr = 0;
@@ -107,7 +107,7 @@ always @ (posedge clk_in) sim_clk <= clk_count[1];
 `endif
 
 //Blink Led with clk
-assign  clk_led = clk_sys;
+//assign  clk_led = clk_sys;
 
   uart_rx #(
             .clk_freq(clk_freq),
@@ -185,13 +185,13 @@ end
 localparam IDLE  = 1'b0;  // Idle state
 localparam WRITE = 1'b1;  // write state
 
-reg [1:0] state;
+reg [1:0] state = 0; //default value
 
 // Transitions
 `ifdef SIM
 always @(posedge sim_clk)
 `else
-always @(posedge clk_in)
+always @(posedge clk_sys)
 `endif
 begin
   if (reset == 1)
@@ -220,6 +220,7 @@ always @* begin
   rw   <= (state == IDLE) ? 1 : 0;
   addr <= (state == IDLE) ? read_addr : write_addr;
 end
+assign  clk_led = state;
 
 
 // Display image
@@ -229,6 +230,7 @@ end
 always @(posedge clk_sys) begin
  if (rw) //READ
     begin
+      write_addr <= 0; //Just in case init again
       if ((v_count >= v_image_start-1 && v_count < v_image_finish-1)
           && (h_count >= h_image_start-1 && h_count < h_image_finish-1))
         begin
@@ -242,7 +244,8 @@ always @(posedge clk_sys) begin
     end
   else //Write
     begin
-      if (data_rdy_ram_prev == 0 && data_rdy_ram == 1) //Posedge happened, new data
+      //if (data_rdy_ram_prev == 0 && data_rdy_ram == 1) //Posedge happened, new data
+      if (data_rdy_rx == 0 && data_rdy_new == 1) //Posedge happened, new data
         begin
           data_in <= rx_data;
           write_addr <= write_addr + 1;
