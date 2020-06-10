@@ -18,7 +18,6 @@ filesets:
       #- "!tool_iverilator? (bench/uart_rx_tb.v)"
     file_type : verilogSource
 
-
   img_sim:
     files:
       - rtl/baudgen.v
@@ -31,9 +30,21 @@ filesets:
       - data/bender.mem : {copyto : bender.mem, file_type : file} #TODO, which kind of file_type is the RAM init file?
     file_type : verilogSource
 
+  top:
+    files:
+      - data/pinout.pcf : {file_type : PCF}
+      - rtl/baudgen.v
+      - rtl/uart_rx.v
+      - rtl/ram.v
+      - rtl/vga_sync.v
+      - rtl/pll.v
+      - rtl/vga_img_receiver.v
+      - data/bender.mem : {copyto : bender.mem, file_type : file} #TODO, which kind of file_type is the RAM init file?
+    file_type : verilogSource
+
 targets:
   default:
-    filesets : [uartrx_sim]
+    filesets : [top]
 
   baudgen_tb:
     default_tool: icarus
@@ -59,6 +70,17 @@ targets:
       icarus:
             iverilog_options : [-DSIM=1]
 
+  top:
+    default_tool: icestorm
+    filesets : [top]
+    parameters : [clk_freq=12000000, baud=115200, img_file=bender.mem]
+    toplevel : vga_img_receiver
+    tools:
+      icestorm:
+            #yosys_synth_options : [-D SIM=0]
+            nextpnr_options : [--hx8k, --package, "tq144:4k", --freq, 25]
+            pnr : next
+
 parameters:
   clk_freq:
     datatype : int
@@ -72,5 +94,5 @@ parameters:
 
   img_file:
     datatype    : file
-    description : Preload RAM with a hex file at compile-time
+    description : Preload RAM with a hex file at init time
     paramtype   : vlogparam
