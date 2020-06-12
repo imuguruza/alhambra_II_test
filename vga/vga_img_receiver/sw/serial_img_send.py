@@ -15,37 +15,20 @@ ser = serial.Serial(
 	stopbits=serial.STOPBITS_TWO,
 	bytesize=serial.EIGHTBITS
 )
-#ser.open()
 ser.reset_output_buffer()
+
 print("Serial open?", end =" ")
 print(bool(ser.is_open))
 count = 0;
 
-# Problem => ff is sent 0f - 0f
-# f = open(file, "rb")
-# byte = f.read(3).replace(b'\n', b'')
-# #ser.flush()
-# while byte:
-#     ser.write(byte)
-#     print(byte)
-#     sleep(0.01)
-#     count += 1
-#     byte = f.read(3).replace(b'\n', b'')
+with open(file, "r") as hexfile:
+    hexlist = hexfile.readlines()
 
-
-# Try to read as string and convert to Hex after
-# This sends just 0s
-f = open(file, "r")
-byte = f.read(3).replace('\n', '')
-#ser.flush()
-while byte:
-    send = int(byte,16)
-    #print (send)
-    ser.write(send)
-    #print(int(byte,16))
-    sleep(0.01)
+for hexval in hexlist:
+    #print(bytes.fromhex(hexval[:2]))
+    ser.write(bytes.fromhex(hexval[:2]))
     count += 1
-    byte = f.read(3).replace('\n', '')
+    #sleep(0.001)
 
 print (str(count) + " bytes sent...")
 print("Image sent, closing port and exiting...\n")
