@@ -23,3 +23,7 @@ set_io locked_led 37
 set_io clk_in 49
 set_io reset 34
 set_io rx 62
+set_io write_done 43
+set_io data_rdy_ram_prev_o 64
+set_io data_rdy_new_o 63
+set_io rx_o 21
