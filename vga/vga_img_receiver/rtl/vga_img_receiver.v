@@ -8,7 +8,12 @@ module vga_img_receiver(
     output wire      h_sync,
     output wire      v_sync,
     output wire      clk_led,
-    output wire      locked_led
+    output wire      locked_led//,
+    //----- DEBUG WIRES ---------------//
+    // output wire      write_done,
+    // output wire      data_rdy_ram_prev_o,
+    // output wire      data_rdy_new_o,
+    // output wire     rx_o
   );
 
 // PARAMETERS
@@ -33,7 +38,7 @@ localparam  h_image_pixel = 100;
 localparam  v_image_pixel = 100;
 
 // Total pixel amount will indicate how many addresses we need to read/write
-localparam addr_amount = h_image_pixel * v_image_pixel;
+localparam addr_amount = (h_image_pixel * v_image_pixel) - 1;
 
 // Calculate where the image needs to be drawn
 localparam   h_image_start  = h_total/2 - h_image_pixel/2;
@@ -66,10 +71,11 @@ reg data_rdy_ram_prev = 0;
 reg data_rdy_ram      = 0;
 reg data_rdy_new      = 0;
 
-reg rx_reg        = 0;
-reg rx_reg_prev   = 0;
-reg rx_reg_prev_2 = 0;
-reg rx_reg_prev_3 = 0;
+// Add default val '1' to avoid state change at INIT
+reg rx_reg        = 1;
+reg rx_reg_prev   = 1;
+reg rx_reg_prev_2 = 1;
+reg rx_reg_prev_3 = 1;
 
 // Read and write addresses
 reg [AddressWidth-1:0] write_addr = 0;
@@ -114,17 +120,17 @@ always @ (posedge clk_in) sim_clk <= clk_count[1];
             .baud(baud)
       )rx0(
 `ifdef SIM
-            .clk(sim_clk),           //Board 12MHz clk
+            .clk(sim_clk),          // Simulated slower clk
 `else
-            .clk(clk_in),           //Board 12MHz clk
+            .clk(clk_in),           // Board 12MHz clk
 `endif
             .rst(reset),            // Board rst button
-            .rx(rx),                //Board rx lane
+            .rx(rx),                // Board rx lane
             .data_rdy(data_rdy),    // Data ready flag
             .data(rx_data));        // RX Data
 
   vga_sync vga_s(
-        .clk_in(clk_in),         //12MHz clock input
+        .clk_in(clk_in),         // 12MHz clock input
         .reset(reset),           // RST assigned to SW1
         .h_sync(h_sync),
         .v_sync(v_sync),
@@ -201,12 +207,13 @@ begin
       IDLE :
         //if (data_rdy_ram_prev == 0 && data_rdy_ram == 1 && write_addr == 0)
         //if (data_rdy== 0 && data_rdy_new == 1 && write_addr == 0)
-        if (rx_reg_prev_3 == 1 && rx_reg == 0 && write_addr == 0) //Start condidition
+        if (rx_reg_prev_3 == 1 && rx_reg == 0 && data_rdy_ram_prev == 0
+            && write_addr == 0) //Start condidition
           state <= WRITE;
         else
           state <= IDLE;
       WRITE:
-        if (write_addr == addr_amount)
+        if (write_addr > addr_amount)
           state <= IDLE;
         else
           state <= WRITE;
@@ -221,7 +228,11 @@ always @* begin
   addr <= (state == IDLE) ? read_addr : write_addr;
 end
 assign  clk_led = state;
-
+// ---------------- DEBUG --------------------------//
+// assign data_rdy_ram_prev_o = data_rdy_ram_prev;
+// assign data_rdy_new_o = data_rdy_new;
+// assign rx_o = rx;
+//------------------------------------------------//
 
 // Display image
 //----------------//
@@ -230,6 +241,9 @@ assign  clk_led = state;
 always @(posedge clk_sys) begin
  if (rw) //READ
     begin
+      //-- DEBUG --
+      //write_done = 0;// Turn off
+      //--------------
       write_addr <= 0; //Just in case init again
       if ((v_count >= v_image_start-1 && v_count < v_image_finish-1)
           && (h_count >= h_image_start-1 && h_count < h_image_finish-1))
@@ -237,21 +251,24 @@ always @(posedge clk_sys) begin
         //Load Image from RAM
           rgb_out <= w_data_out;
           read_addr <= read_addr + 1;//Load new row pixel
-            if (read_addr >= addr_amount -1)//Out of bounce, go to 0
+            if (read_addr >= addr_amount)//Out of bounce, go to 0
               read_addr <= 0;
         end
 
     end
   else //Write
     begin
+      read_addr <= 0; //Just in case init again
       //if (data_rdy_ram_prev == 0 && data_rdy_ram == 1) //Posedge happened, new data
-      if (data_rdy_rx == 0 && data_rdy_new == 1) //Posedge happened, new data
+      if (data_rdy_new == 1 && data_rdy_ram == 0 ) //Posedge happened, new data
         begin
           data_in <= rx_data;
           write_addr <= write_addr + 1;
-          if (write_addr >= addr_amount)
+          if (write_addr > addr_amount)
               // We have achieved to write the img, reset addr and out RAM in read mode
-              write_addr <= 0;
+              write_addr <= 0;   //write_done = 1;// Turn ON
+          // if (write_addr <= addr_amount) write_addr <= write_addr + 1;
+          // else write_addr <= 0; write_done = 1;// Turn ON
         end
     end
 end
