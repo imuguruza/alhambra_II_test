@@ -108,7 +108,11 @@ vga_img_receiver #(.img_file(img_file),
                       .h_sync(h_sync),
                       .v_sync(v_sync),
                       .clk_led(clk_led),
-                      .locked_led(locked_led)
+                      .locked_led(locked_led)//,
+                      // .write_done(),
+                      // .data_rdy_ram_prev_o(),
+                      // .data_rdy_new_o(),
+                      // .rx_o()
                     );
 
 
